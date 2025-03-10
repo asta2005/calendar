@@ -1,12 +1,12 @@
 <?php
-require 'includes/db.php';
+require 'database.php';
 
-if (isset($_POST['title'])) {
-    $title = $_POST['title'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+$data = json_decode(file_get_contents("php://input"), true);
+$title = $data["title"];
+$start = $data["start"];
 
-    $stmt = $conn->prepare("INSERT INTO events (title, start_datetime, end_datetime) VALUES (?, ?, ?)");
-    $stmt->execute([$title, $start, $end]);
-}
+$sql = "INSERT INTO events (title, start) VALUES ('$title', '$start')";
+$conn->query($sql);
+
+$conn->close();
 ?>

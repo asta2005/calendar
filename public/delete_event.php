@@ -1,13 +1,11 @@
 <?php
-// Include the database connection
-require 'includes/db.php';
+require 'database.php';
 
-// Check if the event ID is set in the POST request
-if (isset($_POST['id'])) {
-    $id = $_POST['id']; // Get the event ID from the POST request
+$data = json_decode(file_get_contents("php://input"), true);
+$id = $data["id"];
 
-    // Prepare and execute the SQL statement to delete the event
-    $stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
-    $stmt->execute([$id]);
-}
+$sql = "DELETE FROM events WHERE id=$id";
+$conn->query($sql);
+
+$conn->close();
 ?>

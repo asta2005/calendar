@@ -1,16 +1,13 @@
 <?php
-// Include the database connection
-require 'includes/db.php';
+require 'database.php';
 
-// Check if the event ID and other event details are set in the POST request
-if (isset($_POST['id'])) {
-    $id = $_POST['id']; // Get the event ID
-    $title = $_POST['title']; // Get the event title
-    $start = $_POST['start']; // Get the event start date and time
-    $end = $_POST['end']; // Get the event end date and time
+$data = json_decode(file_get_contents("php://input"), true);
+$id = $data["id"];
+$title = $data["title"];
+$start = $data["start"];
 
-    // Prepare and execute the SQL statement to update the event
-    $stmt = $conn->prepare("UPDATE events SET title = ?, start_datetime = ?, end_datetime = ? WHERE id = ?");
-    $stmt->execute([$title, $start, $end, $id]);
-}
+$sql = "UPDATE events SET title='$title', start='$start' WHERE id=$id";
+$conn->query($sql);
+
+$conn->close();
 ?>

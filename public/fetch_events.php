@@ -1,21 +1,18 @@
 <?php
-// Include the functions file to fetch events from the database
-require 'includes/functions.php';
+include 'includes/db.php';
 
-// Fetch all events from the database
-$events = fetchEvents($conn);
-$data = [];
+$query = "SELECT * FROM events";
+$result = $conn->query($query);
+$events = [];
 
-// Prepare the event data for JSON encoding
-foreach ($events as $event) {
-    $data[] = [
-        'id' => $event['id'], // Event ID
-        'title' => $event['title'], // Event title
-        'start' => $event['start_datetime'], // Event start date and time
-        'end' => $event['end_datetime'] // Event end date and time
+while ($row = $result->fetch_assoc()) {
+    $events[] = [
+        'id' => $row['id'],
+        'title' => $row['title'],
+        'start' => $row['start_datetime'],
+        'end' => $row['end_datetime']
     ];
 }
 
-// Output the event data as a JSON string
-echo json_encode($data);
+echo json_encode($events);
 ?>
